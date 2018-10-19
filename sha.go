@@ -12,7 +12,7 @@ type shaPassword struct {
 	hashed []byte
 }
 
-// Accept valid SHA encoded passwords.
+// AcceptSha accepts valid SHA encoded passwords.
 func AcceptSha(src string) (EncodedPasswd, error) {
 	if !strings.HasPrefix(src, "{SHA}") {
 		return nil, nil
@@ -29,7 +29,7 @@ func AcceptSha(src string) (EncodedPasswd, error) {
 	return &shaPassword{hashed}, nil
 }
 
-// Reject any password encoded as SHA.
+// RejectSha rejects any password encoded as SHA.
 func RejectSha(src string) (EncodedPasswd, error) {
 	if !strings.HasPrefix(src, "{SHA}") {
 		return nil, nil

@@ -8,13 +8,13 @@ type plainPassword struct {
 	password string
 }
 
-// Accept any password in the plain text encoding.
+// AcceptPlain accepts any password in the plain text encoding.
 // Be careful: This matches any line, so it *must* be the last parser in you list.
 func AcceptPlain(pw string) (EncodedPasswd, error) {
 	return &plainPassword{pw}, nil
 }
 
-// Reject any plain text encoded passoword.
+// RejectPlain rejects any plain text encoded password.
 // Be careful: This matches any line, so it *must* be the last parser in you list.
 func RejectPlain(pw string) (EncodedPasswd, error) {
 	return nil, fmt.Errorf("plain password rejected: %s", pw)
