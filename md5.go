@@ -10,27 +10,38 @@ import (
 type md5Password struct {
 	salt   string
 	hashed string
+	prefix string
 }
 
-// Accept valid MD5 encoded passwords
+//PrefixCryptMd5 is the Md5crypt hash prefix
+const PrefixCryptMd5 = "$1$"
+
+//PrefixCryptApr1 is the Apache Apr1 hash prefix
+const PrefixCryptApr1 = "$apr1$"
+
+// AcceptMd5 accepts valid MD5 encoded passwords
 func AcceptMd5(src string) (EncodedPasswd, error) {
-	if !strings.HasPrefix(src, "$apr1$") {
+	if !strings.HasPrefix(src, PrefixCryptApr1) && !strings.HasPrefix(src, PrefixCryptMd5) {
 		return nil, nil
 	}
 
-	rest := strings.TrimPrefix(src, "$apr1$")
+	prefix := PrefixCryptApr1
+	if strings.HasPrefix(src, PrefixCryptMd5) {
+		prefix = PrefixCryptMd5
+	}
+	rest := strings.TrimPrefix(src, prefix)
 	mparts := strings.SplitN(rest, "$", 2)
 	if len(mparts) != 2 {
 		return nil, fmt.Errorf("malformed md5 password: %s", src)
 	}
 
 	salt, hashed := mparts[0], mparts[1]
-	return &md5Password{salt, hashed}, nil
+	return &md5Password{salt, hashed, prefix}, nil
 }
 
-// Reject any MD5 encoded password
+// RejectMd5 rejects any MD5 encoded password
 func RejectMd5(src string) (EncodedPasswd, error) {
-	if !strings.HasPrefix(src, "$apr1$") {
+	if !strings.HasPrefix(src, PrefixCryptApr1) && !strings.HasPrefix(src, PrefixCryptMd5) {
 		return nil, nil
 	}
 	return nil, fmt.Errorf("md5 password rejected: %s", src)
@@ -44,13 +55,15 @@ func RejectMd5(src string) (EncodedPasswd, error) {
 // PHP gets too weird.
 // The algorithm makes more sense if you imagine the original authors in a pub,
 // drinking beer and rolling dice as the fundamental design process.
-func apr1Md5(password string, salt string) string {
+// Note that this is the same algorithm used in md5Crypt except for the prefix in md5Crypt is $1$
+// while in apr1 it's $apr1$
+func md5Crypt(password string, salt string, prefix string) string {
 
 	// start with a hash of password and salt
 	initBin := md5.Sum([]byte(password + salt + password))
 
 	// begin an initial string with hash and salt
-	initText := bytes.NewBufferString(password + "$apr1$" + salt)
+	initText := bytes.NewBufferString(password + prefix + salt)
 
 	// add crap to the string willy-nilly
 	for i := len(password); i > 0; i -= 16 {
@@ -138,6 +151,6 @@ func apr1Md5(password string, salt string) string {
 }
 
 func (m *md5Password) MatchesPassword(pw string) bool {
-	hashed := apr1Md5(pw, m.salt)
+	hashed := md5Crypt(pw, m.salt, m.prefix)
 	return constantTimeEquals(hashed, m.hashed)
 }

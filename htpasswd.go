@@ -29,7 +29,7 @@ type EncodedPasswd interface {
 	MatchesPassword(pw string) bool
 }
 
-// Examine an encoded password, and if it is formatted correctly and sane, return an
+// PasswdParser examines an encoded password, and if it is formatted correctly and sane, return an
 // EncodedPasswd which will recognize it.
 //
 // If the format is not understood, then return nil
@@ -55,8 +55,8 @@ type HtpasswdFile struct {
 	parsers  []PasswdParser
 }
 
-// An array of PasswdParser including all builtin parsers. Notice that Plain is last, since it accepts anything
-var DefaultSystems []PasswdParser = []PasswdParser{AcceptMd5, AcceptSha, RejectBcrypt, AcceptPlain}
+// DefaultSystems is an array of PasswdParser including all builtin parsers. Notice that Plain is last, since it accepts anything
+var DefaultSystems = []PasswdParser{AcceptMd5, AcceptSha, AcceptBcrypt, AcceptSsha, AcceptPlain}
 
 // New creates an HtpasswdFile from an Apache-style htpasswd file for HTTP Basic Authentication.
 //
@@ -83,6 +83,8 @@ func New(filename string, parsers []PasswdParser, bad BadLineHandler) (*Htpasswd
 	return &bf, nil
 }
 
+// Match checks the username and password combination to see if it represents
+// a valid account from the htpassword file.
 func (bf *HtpasswdFile) Match(username, password string) bool {
 	bf.mutex.Lock()
 	matcher, ok := bf.passwds[username]
@@ -96,39 +98,7 @@ func (bf *HtpasswdFile) Match(username, password string) bool {
 	return false
 }
 
-// remove ServeHTTP
-//
-//// A Martini middleware handler to enforce HTTP Basic Auth using the policy read from the htpasswd file.
-//func (bf *HtpasswdFile) ServeHTTP(res http.ResponseWriter, req *http.Request) {
-//	// if everything works, we return, otherwise we get to the
-//	// end where we do an http.Error to stop the request
-//	auth := req.Header.Get("Authorization")
-//
-//	if auth != "" {
-//		userPassword, err := base64.StdEncoding.DecodeString(strings.TrimPrefix(auth, "Basic "))
-//		if err == nil {
-//			parts := strings.SplitN(string(userPassword), ":", 2)
-//			if len(parts) == 2 {
-//				user := parts[0]
-//				pw := parts[1]
-//
-//				bf.mutex.Lock()
-//				matcher, ok := bf.passwds[user]
-//				bf.mutex.Unlock()
-//
-//				if ok && matcher.MatchesPassword(pw) {
-//					// we are good
-//					return
-//				}
-//			}
-//		}
-//	}
-//
-//	res.Header().Set("WWW-Authenticate", "Basic realm=\""+bf.realm+"\"")
-//	http.Error(res, "Not Authorized", http.StatusUnauthorized)
-//}
-
-// Reread the password file for this HtpasswdFile.
+// Reload rereads the htpassword file..
 // You will need to call this to notice any changes to the password file.
 // This function is thread safe. Someone versed in fsnotify might make it
 // happen automatically. Likewise you might also connect a SIGHUP handler to
@@ -166,22 +136,7 @@ func (bf *HtpasswdFile) Reload(bad BadLineHandler) error {
 	return nil
 }
 
-// Reload the htpasswd file on a signal. If there is an error, the old data will be kept instead.
-// Typically you would use syscall.SIGHUP for the value of "when"
-//func (bf *HtpasswdFile) ReloadOn(when os.Signal, onbad BadLineHandler) {
-//	// this is rather common with code in digest, but I don't have a common area...
-//	c := make(chan os.Signal, 1)
-//	signal.Notify(c, when)
-//
-//	go func() {
-//		for {
-//			_ = <-c
-//			bf.Reload(onbad)
-//		}
-//	}()
-//}
-
-// Process a line from an htpasswd file and add it to the user/password map. We may
+// addHtpasswdUser processes a line from an htpasswd file and add it to the user/password map. We may
 // encounter some malformed lines, this will not be an error, but we will log them if
 // the caller has given us a logger.
 func (bf *HtpasswdFile) addHtpasswdUser(pwmap *passwdTable, rawLine string) error {
