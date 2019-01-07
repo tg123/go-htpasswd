@@ -5,9 +5,9 @@
 // by the programmer to support others. (See the sha.go source file as a guide.)
 //
 // You will want to use something like...
-//      myauth := htpasswd.New("My Realm", "./my-htpasswd-file", htpasswd.DefaultSystems, nil)
-//      m.Use(myauth.Handler)
-// ...to configure your authentication and then use the myauth.Handler as a middleware handler in your Martini stack.
+//      myauth := htpasswd.New("./my-htpasswd-file", htpasswd.DefaultSystems, nil)
+//      ok := myauth.Match(user, password)
+// ...to use in your handler code.
 // You should read about that nil, as well as Reread() too.
 package htpasswd
 
