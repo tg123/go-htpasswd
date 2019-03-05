@@ -85,10 +85,10 @@ func New(filename string, parsers []PasswdParser, bad BadLineHandler) (*File, er
 }
 
 // NewFromReader is like new but reads from r instead of a named file. Calling
-// Reload on the returned HtpasswdFile will result in an error; use
+// Reload on the returned File will result in an error; use
 // ReloadFromReader instead.
-func NewFromReader(r io.Reader, parsers []PasswdParser, bad BadLineHandler) (*HtpasswdFile, error) {
-	bf := HtpasswdFile{
+func NewFromReader(r io.Reader, parsers []PasswdParser, bad BadLineHandler) (*File, error) {
+	bf := File{
 		parsers: parsers,
 	}
 
@@ -131,9 +131,9 @@ func (bf *File) Reload(bad BadLineHandler) error {
 }
 
 // ReloadFromReader is like Reload but reads credentials from r instead of a named
-// file. If HtpasswdFile was created by New, it is okay to call Reload and
+// file. If File was created by New, it is okay to call Reload and
 // ReloadFromReader as desired.
-func (bf *HtpasswdFile) ReloadFromReader(r io.Reader, bad BadLineHandler) error {
+func (bf *File) ReloadFromReader(r io.Reader, bad BadLineHandler) error {
 	// ... and a new map ...
 	newPasswdMap := passwdTable{}
 
