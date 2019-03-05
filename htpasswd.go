@@ -14,6 +14,7 @@ package htpasswd
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"os"
 	"strings"
 	"sync"
@@ -83,6 +84,21 @@ func New(filename string, parsers []PasswdParser, bad BadLineHandler) (*Htpasswd
 	return &bf, nil
 }
 
+// NewFromReader is like new but reads from r instead of a named file. Calling
+// Reload on the returned HtpasswdFile will result in an error; use
+// ReloadFromReader instead.
+func NewFromReader(r io.Reader, parsers []PasswdParser, bad BadLineHandler) (*HtpasswdFile, error) {
+	bf := HtpasswdFile{
+		parsers: parsers,
+	}
+
+	if err := bf.ReloadFromReader(r, bad); err != nil {
+		return nil, err
+	}
+
+	return &bf, nil
+}
+
 // Match checks the username and password combination to see if it represents
 // a valid account from the htpassword file.
 func (bf *HtpasswdFile) Match(username, password string) bool {
@@ -111,11 +127,18 @@ func (bf *HtpasswdFile) Reload(bad BadLineHandler) error {
 	}
 	defer f.Close()
 
+	return bf.ReloadFromReader(f, bad)
+}
+
+// ReloadFromReader is like Reload but reads credentials from r instead of a named
+// file. If HtpasswdFile was created by New, it is okay to call Reload and
+// ReloadFromReader as desired.
+func (bf *HtpasswdFile) ReloadFromReader(r io.Reader, bad BadLineHandler) error {
 	// ... and a new map ...
 	newPasswdMap := passwdTable{}
 
 	// ... for each line ...
-	scanner := bufio.NewScanner(f)
+	scanner := bufio.NewScanner(r)
 	for scanner.Scan() {
 		line := scanner.Text()
 
