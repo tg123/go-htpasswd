@@ -18,11 +18,14 @@ jobs:
 
     - name: dep
       run: |
+        export PATH=$PATH:$(go env GOPATH)/bin
         go get -u golang.org/x/lint/golint
         go get -u github.com/gordonklaus/ineffassign
 
     - name: lint
-      run: ./lint.sh
+      run: | 
+        export PATH=$PATH:$(go env GOPATH)/bin
+        ./lint.sh
 
     - name: test
-      run: go test
+      run: go test -race
