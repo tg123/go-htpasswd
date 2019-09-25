@@ -16,5 +16,13 @@ jobs:
     - name: Check out code into the Go module directory
       uses: actions/checkout@v1
 
-    - name: Build
+    - name: dep
+      run: |
+        go get -u golang.org/x/lint/golint
+        go get -u github.com/gordonklaus/ineffassign
+
+    - name: lint
+      run: ./lint.sh
+
+    - name: test
       run: go test
