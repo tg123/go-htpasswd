@@ -26,4 +26,4 @@ jobs:
         ./lint.sh
 
     - name: test
-      run: go test -race
+      run: go test -race -cover -v
