@@ -44,11 +44,14 @@ func TestGroups(t *testing.T) {
 
 	// Replace temp file with another one (contents2)
 	os.Remove(filename)
-	f, err = os.Create(f.Name())
-	if _, err := f.WriteString(contents2); err != nil {
+	f2, errCreate := os.Create(filename)
+        if errCreate != nil {
+		t.Fatalf("Failed to create temporary file: %s", errCreate.Error())
+        }
+	if _, err := f2.WriteString(contents2); err != nil {
 		t.Fatalf("Failed to write temporary file: %s", err.Error())
 	}
-	f.Close()
+	f2.Close()
 	defer os.Remove(filename)
 
 	// Reread the file and check the contents again, user2 should now be member of admins too.
