@@ -213,7 +213,7 @@ var testUsers = []testUser{
 	{"user198", "135745"},
 	{"user199", "603762004"},
 	{"user200", "29011985"},
-	{"user200", "29011985"},
+	{"user201", "29011985"},
 }
 var textPlain = `user1:mickey5
 user2:alexandrew
@@ -415,7 +415,7 @@ user197:331516
 user198:135745
 user199:603762004
 user200:29011985
-user200:29011985`
+user201:29011985`
 
 var textApr1 = `user1:$apr1$gxNb79DX$6wi9QaGNM5TA0kBKiC4710
 user2:$apr1$kv1uUfCO$iEwrWojf92uZ/9uhTQmMo.
@@ -617,7 +617,7 @@ user197:$apr1$UoqGMAIH$bEG70EwRgt0SC6h5nr1wY1
 user198:$apr1$DTVm48a7$KE/H8KTGE0gi9wxM.ZzOs/
 user199:$apr1$0B44zHt5$Xsbx3F0DtToD.KHYc5ViP1
 user200:$apr1$2YOvrTZM$/n5Fol4IfYqLv9tS/QWWj0
-user200:$apr1$2YOvrTZM$/n5Fol4IfYqLv9tS/QWWj0`
+user201:$apr1$2YOvrTZM$/n5Fol4IfYqLv9tS/QWWj0`
 
 var textSha = `user1:{SHA}D9rQ8iK6feNAniulHNKdr5V38ok=
 user2:{SHA}KS7VQqgAnMUfXgWmFCCa6DVhY+M=
@@ -819,7 +819,7 @@ user197:{SHA}uSyZbnpZu1t1TsvoUyp4TsQvePs=
 user198:{SHA}oLBO8TyN9/yjytrlYF6NW0o6He0=
 user199:{SHA}axYN5gmBWHFLDMoMf4Oj/t4ND9I=
 user200:{SHA}KdFYg6fHUtb8tvbRWak+g+kyk/A=
-user200:{SHA}KdFYg6fHUtb8tvbRWak+g+kyk/A=`
+user201:{SHA}KdFYg6fHUtb8tvbRWak+g+kyk/A=`
 
 var textBcrypt = `user1:$2y$05$fpu.jNd5fPlx3ggfZ2BWR.Wc3/hc7ke7LsIpwZM6/e0B6VniqFRIW
 user2:$2y$05$4QmbRfzXERVFyLbUdtCd8ekz1pAfNB5ZsmXevnKgSMc3XHqDYm2wa
@@ -1021,7 +1021,7 @@ user197:$2y$05$0wcbcdEB8/ibQsNnf4euHuBEr.sb9ELtNM/cNddIdCMyq40WgU/la
 user198:$2y$05$qt4IdndlY3VjMhi2CkmUUOWhCrkUEi72.DrPIhZqynnlo4AM.M8Ou
 user199:$2y$05$wXHemFAraZVila6SRTYCluqzby34ZlAMnTuC76f9ZAKHPpOV.vdYe
 user200:$2y$05$m2/Q/xtOckFnDGWbPFfh4.iTVNQlmx0MZP5MURF7adM8qqtBVgC3u
-user200:$2y$05$m2/Q/xtOckFnDGWbPFfh4.iTVNQlmx0MZP5MURF7adM8qqtBVgC3u`
+user201:$2y$05$m2/Q/xtOckFnDGWbPFfh4.iTVNQlmx0MZP5MURF7adM8qqtBVgC3u`
 
 var textSsha = `user1:{SSHA}KHQzbbDgqjRkfd7li1NBL7kI0D5oMzBM
 user2:{SSHA}OFxiAyw1TSNiyGybLyjVg+yewdhoMzBM
@@ -1223,7 +1223,7 @@ user197:{SSHA}lO9vZbWoLYBXqg7jEKfmWszliFpoMzBM
 user198:{SSHA}Mu4MUUt+JNiV+wC0zqnxjO0Lb0hoMzBM
 user199:{SSHA}e+9w+4XNZlPmc0/c2lyLaIbCWPBoMzBM
 user200:{SSHA}y7fnpcvJRDlQAoU/0zgFLNqr5OxoMzBM
-user200:{SSHA}y7fnpcvJRDlQAoU/0zgFLNqr5OxoMzBM`
+user201:{SSHA}y7fnpcvJRDlQAoU/0zgFLNqr5OxoMzBM`
 
 var textMd5Crypt = `
 user1:$1$D89ubl/e$dJ8XW4DfrJHTrnwCdx3Ji1
@@ -1426,7 +1426,7 @@ user197:$1$D89ubl/e$oroQkvFnt80PX9.DFORsH0
 user198:$1$D89ubl/e$SdHoMvPduS1kS3KVqEw9W.
 user199:$1$D89ubl/e$1FQtoOElFQQCBL53IT2LL0
 user200:$1$D89ubl/e$xO3.z/20nsNEXnaWJdsfB/
-user200:$1$D89ubl/e$xO3.z/20nsNEXnaWJdsfB/`
+user201:$1$D89ubl/e$xO3.z/20nsNEXnaWJdsfB/`
 
 var testCryptSha256 = `
 user1:$5$bLwzSej2XBj1YV4F$dXqaTdlpp8juRiUkFJhCYz8Y.p6GQQjCxerNkcGwH58
@@ -1629,7 +1629,7 @@ user197:$5$seC2waG8jzMz95xj$Dl6q9KHYeK5yjE1OZ/g2SWSyj1CJZRq8iNOz9Zu1Si5
 user198:$5$gsipaURd4QYTNkk1$HzQMp0Fvd92xRYYwLQ/eJVGdxAGGS0/qLhTIdh4LdA4
 user199:$5$lqb+rnmb/k6b957a$q4qXGaPi6uWawD4AsaqTzUYt3GiJJFpPDaKFuoAYeG0
 user200:$5$MFy8qvM/otSgysXs$6RvYMcwcLP0HHRtJnwaK/QVUwEqPsCDG2T3OIPmZEH3
-user200:$5$MFy8qvM/otSgysXs$6RvYMcwcLP0HHRtJnwaK/QVUwEqPsCDG2T3OIPmZEH3`
+user201:$5$MFy8qvM/otSgysXs$6RvYMcwcLP0HHRtJnwaK/QVUwEqPsCDG2T3OIPmZEH3`
 
 var testCryptSha512 = `
 user1:$6$iklkG8zV969+0x+f$XKxre3pm8QNHezNxyEXj51AkNy5AXJQKifFhVWqhVaLLUAUAZkDy6Dp1Th/mTE/e/MkImK30.pByqu0CGsQZW1
@@ -1832,8 +1832,7 @@ user197:$6$bsJXFs2QNx8s8Kjk$58D9BnyWb5T320LB6ngHyJSXBPzGlWQVeUmB9rH1Vsq1AAJlojs3
 user198:$6$xB+YALxpWhnd00nX$b9IhO5pOwjcLqVdxDGbIFftg9XB4cfPZfidQ0wiwy4s0BlkZPD2eR3U9r7q8jcHOYkM8Q4EQ/7FOz3gg.qNKa0
 user199:$6$CZrcxdXYlRS6Ve1L$eY.D.b8QbsF5IpKnuXwhCApe10qTK1ldO3SxtRyO/UQ9cuvyVFUEGixfQgiqXvbraZnDXtnAznLul3C3Yf.wm/
 user200:$6$AcPNvmcT6HTw4ATb$k04yoxjtaagGJpcazWjRV4hCa3IgtvaIHWxiPmyceofSwSVbkLZATfMmOXDIRWmXupC/nuhwixrm.zF9neHti.
-user200:$6$rounds=5000$AcPNvmcT6HTw4ATb$k04yoxjtaagGJpcazWjRV4hCa3IgtvaIHWxiPmyceofSwSVbkLZATfMmOXDIRWmXupC/nuhwixrm.zF9neHti.
-
+user201:$6$rounds=5000$AcPNvmcT6HTw4ATb$k04yoxjtaagGJpcazWjRV4hCa3IgtvaIHWxiPmyceofSwSVbkLZATfMmOXDIRWmXupC/nuhwixrm.zF9neHti.
 `
 
 func testSystemReader(t *testing.T, name string, contents string) {
