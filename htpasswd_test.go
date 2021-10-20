@@ -1848,7 +1848,7 @@ func testSystemReader(t *testing.T, name string, contents string) {
 }
 
 func testSystem(t *testing.T, name string, contents string) {
-	f, err := ioutil.TempFile("", "??")
+	f, err := ioutil.TempFile("", "gohtpasswd")
 	if err != nil {
 		t.Fatalf("Failed to make temp file: %s", err.Error())
 	}
