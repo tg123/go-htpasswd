@@ -26,4 +26,19 @@ jobs:
         ./lint.sh
 
     - name: test
-      run: go test -race -cover -v
+      run: go test -race -coverprofile=profile.cov -v
+
+    - name: Send coverage
+      uses: shogo82148/actions-goveralls@v1
+      with:
+        path-to-profile: profile.cov
+        parallel: true
+
+  # notifies that all test jobs are finished.
+  finish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: shogo82148/actions-goveralls@v1
+        with:
+          parallel-finished: true
