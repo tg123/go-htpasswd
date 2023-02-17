@@ -13,10 +13,10 @@ type md5Password struct {
 	prefix string
 }
 
-//PrefixCryptMd5 is the Md5crypt hash prefix
+// PrefixCryptMd5 is the Md5crypt hash prefix
 const PrefixCryptMd5 = "$1$"
 
-//PrefixCryptApr1 is the Apache Apr1 hash prefix
+// PrefixCryptApr1 is the Apache Apr1 hash prefix
 const PrefixCryptApr1 = "$apr1$"
 
 // AcceptMd5 accepts valid MD5 encoded passwords
@@ -49,7 +49,9 @@ func RejectMd5(src string) (EncodedPasswd, error) {
 
 // This is the MD5 hashing function out of Apache's htpasswd program. The algorithm
 // is insane, but we have to match it. Mercifully I found a PHP variant of it at
-//   http://stackoverflow.com/questions/2994637/how-to-edit-htpasswd-using-php
+//
+//	http://stackoverflow.com/questions/2994637/how-to-edit-htpasswd-using-php
+//
 // in an answer. That reads better than the original C, and is easy to instrument.
 // We will eventually go back to the original apr_md5.c for inspiration when the
 // PHP gets too weird.

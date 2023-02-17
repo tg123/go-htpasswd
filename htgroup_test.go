@@ -1,23 +1,21 @@
 package htpasswd
 
 import (
+	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"os"
 	"testing"
-	"github.com/stretchr/testify/assert"
 )
 
-var contents = 
-`users: user1 user2 user3
+var contents = `users: user1 user2 user3
 admins: user1
 `
 
-var contents2 = 
-`users: user1 user2 user3
+var contents2 = `users: user1 user2 user3
 admins: user1 user2
 `
 
-func TestGroups(t *testing.T) { 
+func TestGroups(t *testing.T) {
 	// create temp file and write "contents" into it
 	var f, err = ioutil.TempFile("", "gogroups")
 	filename := f.Name()
@@ -45,9 +43,9 @@ func TestGroups(t *testing.T) {
 	// Replace temp file with another one (contents2)
 	os.Remove(filename)
 	f2, errCreate := os.Create(filename)
-        if errCreate != nil {
+	if errCreate != nil {
 		t.Fatalf("Failed to create temporary file: %s", errCreate.Error())
-        }
+	}
 	if _, err := f2.WriteString(contents2); err != nil {
 		t.Fatalf("Failed to write temporary file: %s", err.Error())
 	}
@@ -55,7 +53,7 @@ func TestGroups(t *testing.T) {
 	defer os.Remove(filename)
 
 	// Reread the file and check the contents again, user2 should now be member of admins too.
-	reloadError := htGroup.ReloadGroups(nil);
+	reloadError := htGroup.ReloadGroups(nil)
 	assert.NoError(t, reloadError)
 	assert.True(t, htGroup.IsUserInGroup("user1", "users"))
 	assert.True(t, htGroup.IsUserInGroup("user1", "admins"))

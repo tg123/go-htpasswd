@@ -13,7 +13,7 @@ type sshaPassword struct {
 	salt   []byte
 }
 
-//AcceptSsha accepts any valid password encoded using bcrypt.
+// AcceptSsha accepts any valid password encoded using bcrypt.
 func AcceptSsha(src string) (EncodedPasswd, error) {
 	if !strings.HasPrefix(src, "{SSHA}") {
 		return nil, nil
@@ -35,7 +35,7 @@ func AcceptSsha(src string) (EncodedPasswd, error) {
 	return &sshaPassword{hash, salt}, nil
 }
 
-//RejectSsha rejects any password encoded using SSHA1.
+// RejectSsha rejects any password encoded using SSHA1.
 func RejectSsha(src string) (EncodedPasswd, error) {
 	if !strings.HasPrefix(src, "{SSHA}") {
 		return nil, nil
