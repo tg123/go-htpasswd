@@ -1,10 +1,10 @@
 package htpasswd
 
 import (
-	"github.com/stretchr/testify/assert"
-	"io/ioutil"
 	"os"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 var contents = `users: user1 user2 user3
@@ -17,7 +17,7 @@ admins: user1 user2
 
 func TestGroups(t *testing.T) {
 	// create temp file and write "contents" into it
-	var f, err = ioutil.TempFile("", "gogroups")
+	var f, err = os.CreateTemp("", "gogroups")
 	filename := f.Name()
 	assert.NoError(t, err)
 	if _, err := f.WriteString(contents); err != nil {
