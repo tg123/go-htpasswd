@@ -9,21 +9,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0    
 
     - name: Set up Go
-      uses: actions/setup-go@v2
-
-    - name: dep
-      run: |
-        export PATH=$PATH:$(go env GOPATH)/bin
-        go get -u golang.org/x/lint/golint
-        go get -u github.com/gordonklaus/ineffassign
-
-    - name: lint
-      run: | 
-        export PATH=$PATH:$(go env GOPATH)/bin
-        ./lint.sh
+      uses: actions/setup-go@v3
+      with:
+        go-version: ^1.20
+        cache: true      
 
     - name: test
       run: go test -race -coverprofile=profile.cov -v
