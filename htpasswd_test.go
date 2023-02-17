@@ -1,7 +1,6 @@
 package htpasswd
 
 import (
-	"io/ioutil"
 	"os"
 	"strings"
 	"testing"
@@ -1856,7 +1855,7 @@ func testSystemReader(t *testing.T, name string, contents string) {
 }
 
 func testSystem(t *testing.T, name string, contents string) {
-	f, err := ioutil.TempFile("", "gohtpasswd")
+	f, err := os.CreateTemp("", "gohtpasswd")
 	if err != nil {
 		t.Fatalf("Failed to make temp file: %s", err.Error())
 	}
