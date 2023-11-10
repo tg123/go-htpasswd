@@ -26,7 +26,7 @@ type userGroupMap map[string][]string
 // A HTGroup encompasses an Apache-style group file.
 type HTGroup struct {
 	filePath   string
-	mutex      sync.Mutex
+	mutex      sync.RWMutex
 	userGroups userGroupMap
 }
 
@@ -123,9 +123,9 @@ func (htGroup *HTGroup) IsUserInGroup(user string, group string) bool {
 // GetUserGroups reads all groups of a user.
 // Returns all groups as a string array or an empty array.
 func (htGroup *HTGroup) GetUserGroups(user string) []string {
-	htGroup.mutex.Lock()
+	htGroup.mutex.RLock()
 	groups := htGroup.userGroups[user]
-	htGroup.mutex.Unlock()
+	htGroup.mutex.RUnlock()
 
 	if groups == nil {
 		return []string{}
