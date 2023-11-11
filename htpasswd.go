@@ -53,7 +53,7 @@ type BadLineHandler func(err error)
 // An File encompasses an Apache-style htpasswd file for HTTP Basic authentication
 type File struct {
 	filePath string
-	mutex    sync.Mutex
+	mutex    sync.RWMutex
 	passwds  passwdTable
 	parsers  []PasswdParser
 }
@@ -104,9 +104,9 @@ func NewFromReader(r io.Reader, parsers []PasswdParser, bad BadLineHandler) (*Fi
 // Match checks the username and password combination to see if it represents
 // a valid account from the htpassword file.
 func (bf *File) Match(username, password string) bool {
-	bf.mutex.Lock()
+	bf.mutex.RLock()
 	matcher, ok := bf.passwds[username]
-	bf.mutex.Unlock()
+	bf.mutex.RUnlock()
 
 	if ok && matcher.MatchesPassword(password) {
 		// we are good
