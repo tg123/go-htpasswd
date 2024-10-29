@@ -2,6 +2,7 @@ package htpasswd
 
 import (
 	"os"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -55,6 +56,22 @@ func TestGroups(t *testing.T) {
 	// Reread the file and check the contents again, user2 should now be member of admins too.
 	reloadError := htGroup.ReloadGroups(nil)
 	assert.NoError(t, reloadError)
+	assert.True(t, htGroup.IsUserInGroup("user1", "users"))
+	assert.True(t, htGroup.IsUserInGroup("user1", "admins"))
+	assert.True(t, htGroup.IsUserInGroup("user2", "users"))
+	assert.True(t, htGroup.IsUserInGroup("user2", "admins"))
+	assert.False(t, htGroup.IsUserInGroup("unknownuser", "users"))
+	assert.False(t, htGroup.IsUserInGroup("user1", "unknowngroup"))
+	assert.False(t, htGroup.IsUserInGroup("unknownuser", "unknowngroup"))
+	assert.Len(t, htGroup.GetUserGroups("user1"), 2)
+	assert.Len(t, htGroup.GetUserGroups("user2"), 2)
+	assert.Len(t, htGroup.GetUserGroups("user3"), 1)
+	assert.Len(t, htGroup.GetUserGroups("unknownuser"), 0)
+
+	// Test load from reader as well
+	r := strings.NewReader(contents2)
+	htGroup, err = NewGroupsFromReader(r, nil)
+	assert.NoError(t, err)
 	assert.True(t, htGroup.IsUserInGroup("user1", "users"))
 	assert.True(t, htGroup.IsUserInGroup("user1", "admins"))
 	assert.True(t, htGroup.IsUserInGroup("user2", "users"))
