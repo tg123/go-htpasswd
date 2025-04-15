@@ -1,11 +1,13 @@
 module github.com/tg123/go-htpasswd
 
-go 1.20
+go 1.23.0
+
+toolchain go1.24.2
 
 require (
-	github.com/GehirnInc/crypt v0.0.0-20200316065508-bb7000b8a962
-	github.com/stretchr/testify v1.8.1
-	golang.org/x/crypto v0.31.0
+	github.com/GehirnInc/crypt v0.0.0-20230320061759-8cc1b52080c5
+	github.com/stretchr/testify v1.10.0
+	golang.org/x/crypto v0.37.0
 )
 
 require (
