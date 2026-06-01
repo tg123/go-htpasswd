@@ -4,6 +4,8 @@ import (
 	"os"
 	"strings"
 	"testing"
+
+	"github.com/stretchr/testify/require"
 )
 
 type testUser struct {
@@ -1909,3 +1911,22 @@ func Test_CryptSha256File(t *testing.T)   { testSystem(t, "crypt-sha256", testCr
 
 func Test_CryptSha512Reader(t *testing.T) { testSystemReader(t, "crypt-sha512", testCryptSha512) }
 func Test_CryptSha512File(t *testing.T)   { testSystem(t, "crypt-sha512", testCryptSha512) }
+
+func Test_Exists(t *testing.T) {
+	htp, err := NewFromReader(strings.NewReader(textPlain), DefaultSystems, nil)
+	require.NoError(t, err, "failed to read htpasswd reader")
+
+	for _, u := range testUsers {
+		require.True(t, htp.Exists(u.username), "Exists returned false for known user %s", u.username)
+	}
+
+	for _, name := range []string{"", "nope", "user0", "user202", "User1"} {
+		require.False(t, htp.Exists(name), "Exists returned true for missing user %q", name)
+	}
+
+	err = htp.ReloadFromReader(strings.NewReader("alice:alicepw\nbob:bobpw"), nil)
+	require.NoError(t, err, "ReloadFromReader failed")
+	require.False(t, htp.Exists("user1"), "user1 still present after Reload swap")
+	require.True(t, htp.Exists("alice"), "alice missing after Reload swap")
+	require.True(t, htp.Exists("bob"), "bob missing after Reload swap")
+}

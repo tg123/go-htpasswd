@@ -101,7 +101,7 @@ func NewFromReader(r io.Reader, parsers []PasswdParser, bad BadLineHandler) (*Fi
 }
 
 // Match checks the username and password combination to see if it represents
-// a valid account from the htpassword file.
+// a valid account from the htpasswd file.
 func (bf *File) Match(username, password string) bool {
 	matcher, ok := (*bf.passwds.Load())[username]
 
@@ -114,14 +114,14 @@ func (bf *File) Match(username, password string) bool {
 }
 
 // Exists reports whether the given username is currently known to the
-// htpassword file. Useful for callers that need to gate other operations
+// htpasswd file. Useful for callers that need to gate other operations
 // (e.g. session refresh) on user presence without doing a password match.
 func (bf *File) Exists(username string) bool {
 	_, ok := (*bf.passwds.Load())[username]
 	return ok
 }
 
-// Reload rereads the htpassword file..
+// Reload rereads the htpasswd file.
 // You will need to call this to notice any changes to the password file.
 // This function is thread safe. Someone versed in fsnotify might make it
 // happen automatically. Likewise you might also connect a SIGHUP handler to
