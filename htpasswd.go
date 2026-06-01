@@ -113,6 +113,14 @@ func (bf *File) Match(username, password string) bool {
 	return false
 }
 
+// Exists reports whether the given username is currently known to the
+// htpassword file. Useful for callers that need to gate other operations
+// (e.g. session refresh) on user presence without doing a password match.
+func (bf *File) Exists(username string) bool {
+	_, ok := (*bf.passwds.Load())[username]
+	return ok
+}
+
 // Reload rereads the htpassword file..
 // You will need to call this to notice any changes to the password file.
 // This function is thread safe. Someone versed in fsnotify might make it
