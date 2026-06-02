@@ -1929,4 +1929,10 @@ func Test_Exists(t *testing.T) {
 	require.False(t, htp.Exists("user1"), "user1 still present after Reload swap")
 	require.True(t, htp.Exists("alice"), "alice missing after Reload swap")
 	require.True(t, htp.Exists("bob"), "bob missing after Reload swap")
+
+	// A zero-value File has no loaded password table; Exists and Match must
+	// not panic and should report no match.
+	var zero File
+	require.False(t, zero.Exists("alice"), "zero-value File.Exists should return false")
+	require.False(t, zero.Match("alice", "alicepw"), "zero-value File.Match should return false")
 }

@@ -103,7 +103,12 @@ func NewFromReader(r io.Reader, parsers []PasswdParser, bad BadLineHandler) (*Fi
 // Match checks the username and password combination to see if it represents
 // a valid account from the htpasswd file.
 func (bf *File) Match(username, password string) bool {
-	matcher, ok := (*bf.passwds.Load())[username]
+	passwds := bf.passwds.Load()
+	if passwds == nil {
+		return false
+	}
+
+	matcher, ok := (*passwds)[username]
 
 	if ok && matcher.MatchesPassword(password) {
 		// we are good
@@ -117,7 +122,12 @@ func (bf *File) Match(username, password string) bool {
 // htpasswd file. Useful for callers that need to gate other operations
 // (e.g. session refresh) on user presence without doing a password match.
 func (bf *File) Exists(username string) bool {
-	_, ok := (*bf.passwds.Load())[username]
+	passwds := bf.passwds.Load()
+	if passwds == nil {
+		return false
+	}
+
+	_, ok := (*passwds)[username]
 	return ok
 }
 
