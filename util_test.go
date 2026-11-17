@@ -68,3 +68,18 @@ func testParserNot(t *testing.T, name string, accept PasswdParser, reject Passwd
 		}
 	}
 }
+
+func Test_constantTimeEquals(t *testing.T) {
+	if !constantTimeEquals("secret", "secret") {
+		t.Error("equal strings did not match")
+	}
+	if constantTimeEquals("secret", "secreT") {
+		t.Error("different strings matched")
+	}
+	if constantTimeEquals("secret", "secret-longer") {
+		t.Error("strings of different length matched")
+	}
+	if !constantTimeEquals("", "") {
+		t.Error("empty strings did not match")
+	}
+}
